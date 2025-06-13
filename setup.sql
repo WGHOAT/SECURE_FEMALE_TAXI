@@ -1,7 +1,0 @@
-CREATE DATABASE secure_female_taxi;
-
-CREATE USER ajay WITH PASSWORD '1808';
-CREATE USER rohith WITH PASSWORD '1234';
-GRANT ALL PRIVILEGES ON DATABASE secure_female_taxi TO ajay;
-GRANT ALL PRIVILEGES ON DATABASE secure_female_taxi TO rohith;
-
