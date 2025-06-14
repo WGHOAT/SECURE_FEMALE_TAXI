@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     last_ride TIMESTAMP,
     last_ride_vechicle_number VARCHAR(20) NOT NULL
-    -- Assuming last_ride_vehicle_number is a reference to vehicle_number in driver_data
+   
 );
 
     CREATE  TABLE IF NOT EXISTS
