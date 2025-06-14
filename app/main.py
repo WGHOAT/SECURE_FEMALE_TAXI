@@ -36,3 +36,4 @@ def say_hello(name: str):
 @app.get("/test_case/{value}")
 def test(value : int):
     return {'warning 1': f'{value}This works'}
+
