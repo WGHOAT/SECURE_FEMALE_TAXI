@@ -1,4 +1,6 @@
+from database import Base , engine
 from fastapi import FastAPI
+import models
 
 app = FastAPI()
 
@@ -37,3 +39,6 @@ def say_hello(name: str):
 def test(value : int):
     return {'warning 1': f'{value}This works'}
 
+@app.on_event("startup")
+def on_startup():
+    Base.metadata.create_all(bind=engine)
