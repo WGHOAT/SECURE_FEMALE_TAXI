@@ -96,4 +96,5 @@ class DriverAvailability(Base):
     id = Column(Integer, primary_key=True, index=True)
     driver_id = Column(Integer, ForeignKey('driver_data.id'), nullable=False)
     available = Column(Boolean, nullable=False, server_default="1")
-    last_updated = Column(TIMESTAMP, server_default=func.now())
+    last_updated = Column(TIMESTAMP, server_default=func.now())server_default='CURRENT_TIMESTAMP'
+""""Well just want to make this as 100"""
