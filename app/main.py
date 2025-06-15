@@ -1,8 +1,49 @@
-from database import Base , engine
-from fastapi import FastAPI
+from database import Base , engine , SessionLocal
+from fastapi import FastAPI , Depends, HTTPException
 import models
+from sqlalchemy.orm import Session
+from contextlib import asynccontextmanager
+from pydantic import BaseModel
+from typing import Optional
+from datetime import datetime
+from decimal import Decimal
 
-app = FastAPI()
+async def lifespan(app : FastAPI):
+   Base.metadata.create_all(bind=engine)
+   
+   yield
+app = FastAPI(lifespan=lifespan)
+
+
+#-------------------------------------------------
+# pydantic base model for DriverData
+class DriverDataSchema(BaseModel):
+    id : Optional[int]
+    d_name : str
+    C_vehicle_number : str
+    C_vehicle_type : str
+    P_vehicle_number : str
+    P_vehicle_type : str
+    license_number : str
+    D_phone_number : str
+    D_email : str
+    last_ride : datetime
+    status : bool
+    d_created_at : datetime
+    d_updated_at : datetime
+    rating : Decimal
+
+    class Config:
+       from_attributes = True
+#-------------------------------------------------
+
+# db session intialize
+def get_db():
+    db = SessionLocal()
+    try : 
+      yield db
+    finally:
+        db.close()
 
 """  uvicorn app.main:app --reload use this to load this  
 now when you go to http://127.0.0.1:8000/(the app.get() values you can access the api) 
@@ -26,19 +67,17 @@ also when you push this to main branch do like this:
 
  and push will push it to the main branch
 """
-
-
 @app.get("/")
-def read_root():
-    return {"message": "Hello, FastAPI wizard!"}
+def rooted():
+   return {'Message':'Hello'}
 
-@app.get("/hello/{name}")
-def say_hello(name: str):
-    return {"greeting": f"Hello, {name}!"}
-@app.get("/test_case/{value}")
-def test(value : int):
-    return {'warning 1': f'{value}This works'}
-
-@app.on_event("startup")
-def on_startup():
-    Base.metadata.create_all(bind=engine)
+@app.post('/api/vehicle_number')
+def add_vehicle_number(request : DriverDataSchema ,db : Session = Depends(get_db)):
+   exist_already = db.query(models.DriverData).filter_by(C_vehicle_number =request.C_vehicle_number).first()
+   if exist_already:
+      raise HTTPException(status_code=400 , detail='Vehicle already exist in Database.')
+   driver_v_number = models.DriverData(C_vehicle_number=request.C_vehicle_number)
+   db.add(driver_v_number)
+   db.commit()
+   db.refresh(driver_v_number)
+   return{'id':driver_v_number.id,'Vehicle_number:':driver_v_number.C_vechicle_number}
