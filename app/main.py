@@ -1,12 +1,10 @@
 from database import Base , engine , SessionLocal
 from fastapi import FastAPI , Depends, HTTPException
-import models
+import schema
 from sqlalchemy.orm import Session
 from contextlib import asynccontextmanager
-from pydantic import BaseModel
-from typing import Optional
-from datetime import datetime
-from decimal import Decimal
+import models
+
 
 async def lifespan(app : FastAPI):
    Base.metadata.create_all(bind=engine)
@@ -17,6 +15,7 @@ app = FastAPI(lifespan=lifespan)
 
 #-------------------------------------------------
 # pydantic base model for DriverData
+'''
 class DriverDataSchema(BaseModel):
     id : Optional[int]
     d_name : str
@@ -36,7 +35,7 @@ class DriverDataSchema(BaseModel):
     class Config:
        from_attributes = True
 #-------------------------------------------------
-
+'''
 # db session intialize
 def get_db():
     db = SessionLocal()
@@ -45,39 +44,27 @@ def get_db():
     finally:
         db.close()
 
-"""  uvicorn app.main:app --reload use this to load this  
-now when you go to http://127.0.0.1:8000/(the app.get() values you can access the api) 
+'''use fastapi dev to run bro 
 
-example: http://127.0.0.1:8000/test_case/1
+but install fastapi[standard] first
 
+'''
 
-also when you push this to main branch do like this:
-
- 1243  git add .
- 1244  git commit -m 'FASTAPI_INTIALIZATION'
- 1245  git pull origin main
- 1246  git push -u origin main
-
- first add -> commit -> pull -> push
-
-
- that commit will save your work locally 
-
- and pull will keep you upto date 
-
- and push will push it to the main branch
-"""
 @app.get("/")
 def rooted():
    return {'Message':'Hello'}
 
-@app.post('/api/vehicle_number')
-def add_vehicle_number(request : DriverDataSchema ,db : Session = Depends(get_db)):
-   exist_already = db.query(models.DriverData).filter_by(C_vehicle_number =request.C_vehicle_number).first()
-   if exist_already:
-      raise HTTPException(status_code=400 , detail='Vehicle already exist in Database.')
-   driver_v_number = models.DriverData(C_vehicle_number=request.C_vehicle_number)
-   db.add(driver_v_number)
+@app.post('/api/driveradd')
+def driveradd(request : schema.DriverDataSchema , db : Session  = Depends(get_db) ):
+   exist_already = db.query(models.DriverData).filter_by(C_vehicle_number = request.C_vehicle_number).first()
+   if exist_already :
+      raise HTTPException(status_code=400,detail='Driver already exist in Database')
+   driver = models.DriverData(**request.model_dump())
+   db.add(driver)
    db.commit()
-   db.refresh(driver_v_number)
-   return{'id':driver_v_number.id,'Vehicle_number:':driver_v_number.C_vechicle_number}
+   db.refresh(driver)
+   return {
+      'message':'Driver and vehicle Added Successfully',
+      'id' : driver.id,
+      'Current Vehichle' : driver.C_vehicle_number
+   }

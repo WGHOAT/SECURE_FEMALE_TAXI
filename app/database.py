@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, text , inspect
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 
-DB_URL = "postgresql://admin:12345678@localhost/secure_female_taxi"
+DB_URL = "postgresql://admin:12345678@localhost:5432/secure_female_taxi"
 
 engine = create_engine(DB_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
