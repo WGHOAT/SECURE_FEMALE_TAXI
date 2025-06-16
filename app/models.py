@@ -40,7 +40,7 @@ class User_data(Base):
     id = Column(Integer , primary_key=True, index=True)
     u_name = Column(String(101))
     u_email = Column(String(102) , unique=True , index=True , nullable=False)
-    u_phone = Column(Integer, unique=True, nullable=False , index=True)
+    u_phone = Column(String(102), unique=True, nullable=False , index=True)
     u_created_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     u_updated_at = Column(TIMESTAMP, server_default=func.now(), nullable=False)
     last_ride = Column(TIMESTAMP, server_default=func.now())
