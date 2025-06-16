@@ -2,6 +2,9 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
 
+
+
+
 class DriverDataSchema(BaseModel):
     id: int
     d_name: str

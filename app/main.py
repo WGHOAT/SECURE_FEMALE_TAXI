@@ -13,29 +13,7 @@ async def lifespan(app : FastAPI):
 app = FastAPI(lifespan=lifespan)
 
 
-#-------------------------------------------------
-# pydantic base model for DriverData
-'''
-class DriverDataSchema(BaseModel):
-    id : Optional[int]
-    d_name : str
-    C_vehicle_number : str
-    C_vehicle_type : str
-    P_vehicle_number : str
-    P_vehicle_type : str
-    license_number : str
-    D_phone_number : str
-    D_email : str
-    last_ride : datetime
-    status : bool
-    d_created_at : datetime
-    d_updated_at : datetime
-    rating : Decimal
 
-    class Config:
-       from_attributes = True
-#-------------------------------------------------
-'''
 # db session intialize
 def get_db():
     db = SessionLocal()
@@ -54,6 +32,8 @@ but install fastapi[standard] first
 def rooted():
    return {'Message':'Hello'}
 
+#Driver Methods
+
 @app.post('/api/driverdetails')
 def driveradd(request : schema.DriverDataSchema , db : Session  = Depends(get_db) ):
    exist_already = db.query(models.DriverData).filter_by(C_vehicle_number = request.C_vehicle_number).first()
@@ -69,6 +49,8 @@ def driveradd(request : schema.DriverDataSchema , db : Session  = Depends(get_db
       'id' : driver.id,
       'Current Vehichle' : driver.C_vehicle_number
    }
+
+# User Methods
 @app.post('/api/userinfo')
 def useradd(request : schema.User_dataSchema,db : Session = Depends(get_db)):
    exist_already = db.query(models.User_data).filter_by(u_phone = request.u_phone).first()
