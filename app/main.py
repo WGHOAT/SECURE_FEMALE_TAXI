@@ -32,7 +32,7 @@ but install fastapi[standard] first
 def rooted():
    return {'Message':'Hello'}
 
-#Driver Methods
+#Driver ENDPOINTS
 
 @app.post('/api/driverdetails')
 def driveradd(request : schema.DriverDataSchema , db : Session  = Depends(get_db) ):
@@ -50,7 +50,9 @@ def driveradd(request : schema.DriverDataSchema , db : Session  = Depends(get_db
       'Current Vehichle' : driver.C_vehicle_number
    }
 
-# User Methods
+
+
+# User ENDPOINTS
 @app.post('/api/userinfo')
 def useradd(request : schema.User_dataSchema,db : Session = Depends(get_db)):
    exist_already = db.query(models.User_data).filter_by(u_phone = request.u_phone).first()
@@ -65,3 +67,4 @@ def useradd(request : schema.User_dataSchema,db : Session = Depends(get_db)):
       'user' : user.u_name,
       'phone':user.u_phone
    }
+
