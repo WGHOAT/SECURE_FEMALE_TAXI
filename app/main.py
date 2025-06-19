@@ -68,3 +68,58 @@ def useradd(request : schema.User_dataSchema,db : Session = Depends(get_db)):
       'phone':user.u_phone
    }
 
+#Driver Availability Endpoint
+@app.post('/api/driveravailability')
+def driver_availability_add(request : schema.DriverAvialabilitySchema, db : Session = Depends(get_db)):
+   availability = db.query(models.DriverAvailability).filter_by(driver_id=request.driver_id).first()
+   if availability:
+      raise HTTPException(status_code=400, detail='Availability already exists for this driver')
+   availability = models.DriverAvailability(**request.model_dump())
+   db.add(availability)
+   db.commit()
+   db.refresh(availability)
+   return {
+      'message': 'Driver availability added successfully',
+      'availability_id': availability.id
+   }
+
+
+#Ride Data ENDPOINT
+@app.post('/api/ridedata')
+def ride_add(request : schema.RidedataSchema, db : Session = Depends(get_db)):
+   ride = models.RideData(**request.model_dump())
+   db.add(ride)
+   db.commit()
+   db.refresh(ride)
+   return {
+      'message': 'Ride data added successfully',
+      'ride_id': ride.id
+   }
+
+
+#Payment Data ENDPOINT
+@app.post('/api/payment')
+def payment_add(request : schema.PaymentDataSchema, db : Session = Depends(get_db)):
+   payment = db.query(models.PaymentData).filter_by(ride_id=request.ride_id).first()
+   if payment:
+      raise HTTPException(status_code=400, detail='Payment already exists for this ride')
+   payment = models.PaymentData(**request.model_dump())
+   db.add(payment)
+   db.commit()
+   db.refresh(payment)
+   return {
+      'message': 'Payment added successfully',
+      'payment_id': payment.id
+   }
+
+#Feedback Data Endpoint
+@app.post('/api/feedback')
+def feedback_add(request : schema.FeedbackDataSchema, db : Session = Depends(get_db)):
+   feedback = models.FeedbackData(**request.model_dump())
+   db.add(feedback)
+   db.commit()
+   db.refresh(feedback)
+   return {
+      'message': 'Feedback added successfully',
+      'feedback_id': feedback.id
+   }
