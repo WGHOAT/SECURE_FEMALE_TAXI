@@ -7,8 +7,7 @@ To Develop a Secure Way for Females to travel in taxies Since Other Platforms Do
 *Working*
 Users have to scan face of the driver face or scan QR which should be placed on every taxi 
 After scanning Driver details along with Certain Data Will pop us 
-Data will include
-1. Total Sum of trips taken By driver
+Data will include1. Total Sum of trips taken By driver
 2. Total Sum of Successful Rides Successfully done By the Driver
 3. Total sum of Accidents by the Driver
 4. Total sum of Reports on the Driver
