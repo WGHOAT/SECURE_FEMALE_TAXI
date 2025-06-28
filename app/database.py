@@ -1,14 +1,15 @@
 # db.py
-from sqlalchemy import create_engine, text , inspect
-from sqlalchemy.orm import sessionmaker, declarative_base
+from sqlalchemy import create_engine , text , inspect
+from sqlalchemy.ext.asyncio import create_async_engine , async_sessionmaker
+from sqlalchemy.orm import declarative_base
 
 
-DB_URL = "postgresql://admin:12345678@localhost:5432/secure_female_taxi"
+DB_URL = "postgresql+asyncpg://admin:12345678@localhost:5432/secure_female_taxi"
 
-engine = create_engine(DB_URL)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+engine = create_async_engine(DB_URL)
+SessionLocal = async_sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
-
+"""
 try:
     with engine.connect() as connection:
         result = connection.execute(text("SELECT 1"))
@@ -22,3 +23,4 @@ check_tables = test.get_table_names()
 
 print(check_tables)
 
+"""
