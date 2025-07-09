@@ -4,12 +4,22 @@ import schema
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 import models
-
-
-async def lifespan(app : FastAPI):
-   async with engine.begin() as conn:
-      await conn.run_sync(Base.metadata.create_all)   
-   yield
+import contextlib
+from typing import Any , AsyncGenerator
+@contextlib.asynccontextmanager
+async def lifespan(app : FastAPI) -> AsyncGenerator[None ,Any]:
+   
+   print("Application Startup : Creating DataBase")
+   try:   
+      async with engine.begin() as conn:
+         await conn.run_sync(Base.metadata.create_all)   
+      print("Startup Complete: DataBase Creation")
+      yield
+   except Exception as error:
+      print(f"Exception{error}")
+   print("Closing application")
+   print("Cleaning Process")
+   
 app = FastAPI(lifespan=lifespan)
 
 

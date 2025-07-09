@@ -12,7 +12,7 @@ SECURE_FEMALE_TAXI aims to provide a safe and secure transportation solution for
 
 The platform provides a multi-faceted approach to security:
 
-1.  **Driver Verification:** Before starting a trip, passengers can verify their driver's identity by:
+1.  **Driver Verification:** Before starting a trip, passengers can verify their driver's identity by Either one of these:
     *   Scanning the driver's face using their smartphone camera.
     *   Scanning a unique QR code assigned to each driver and vehicle.
 
@@ -43,7 +43,7 @@ The platform provides a multi-faceted approach to security:
 
 **Prerequisites:**
 
-*   Python 3.8+
+*   Python 3.11+
 *   PostgreSQL
 
 **Installation:**
